@@ -1,13 +1,23 @@
 <?php 
+// redirect jika tidak memiliki query string 'id'
 if(isset($_GET['id']) == false){
 	header('location:list_barang.php');
 }
 
+// connect ke DB
 include "connect.php";
 
+// get ID dan query select
 $id = $_GET['id'];
 $query = "SELECT * FROM msbarang WHERE id = $id";
 $result = mysql_query($query);
+
+// jika hasil select NULL, redirect ke page list_barang
+if(!$result){
+	header('location:list_barang.php');	
+}
+
+// convert data ke array dan tampilkan di text field
 $row = mysql_fetch_array($result);
 ?>
 <!DOCTYPE html>
@@ -51,6 +61,7 @@ $row = mysql_fetch_array($result);
 		<tr>
 			<td colspan="2">
 				<?php 
+				// tampilkan pesan berhasil/gagal
 				if(isset($_GET['success'])){
 					$success = $_GET['success'];
 					if($success == 1){

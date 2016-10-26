@@ -38,6 +38,7 @@
 		<tr>
 			<td colspan="2">
 				<?php 
+				// tampilkan pesan berhasil/gagal
 				if($_GET['success']){
 					$success = $_GET['success'];
 					if($success == 1){

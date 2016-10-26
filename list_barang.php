@@ -1,6 +1,8 @@
 <?php
+// connect ke DB
 include("connect.php");
 
+// validasi query string 'page'
 if(isset($_GET['page'])){
 	$curr_page = $_GET['page'];
 	if($curr_page <= 1) $curr_page = 1;
@@ -10,9 +12,16 @@ else{
 }
 
 
-// pagination/paging
+// PAGINATION
 // hitung jumlah row
-$row_num = mysql_num_rows(mysql_query("SELECT * FROM msbarang"));
+// validasi jika table kosong
+$res = mysql_query("SELECT * FROM msbarang");
+if($res){
+	$row_num = mysql_num_rows($res);	
+}
+else{
+	$row_num = 0;
+}
 // set jumlah row per page
 $data_per_page = 2;
 // set jumlah page yang ditampilkan
@@ -22,6 +31,7 @@ $page_num = $row_num % $data_per_page != 0 ? floor($row_num/$data_per_page) + 1 
 // hitung batas awal dan akhir
 $start = ($curr_page-1) * $data_per_page;
 
+// query data
 $result = mysql_query("SELECT * FROM msbarang LIMIT $start, $data_per_page");
 ?>
 <!DOCTYPE html>
@@ -42,19 +52,26 @@ $result = mysql_query("SELECT * FROM msbarang LIMIT $start, $data_per_page");
 			<th>Action</th>
 		</tr>
 		<?php
-		while($row = mysql_fetch_array($result)){
-		?>
-		<tr>
-			<td><?php echo $row['id']; ?></td>
-			<td><?php echo $row['nama']; ?></td>
-			<td><?php echo $row['deskripsi']; ?></td>
-			<td><?php echo $row['qty']; ?></td>
-			<td>
-				<a href="edit_barang.php?id=<?php echo $row['id'];?>">Edit</a>
-				<a href="hapus_barang.php?id=<?php echo $row['id'];?>" onclick="return confirm('Apakah anda yakin untuk menghapus data ini?');">Hapus</a>
-			</td>
-		</tr>
-		<?php
+		// jika ada data, maka tampilkan semua data
+		if($result){
+			while($row = mysql_fetch_array($result)){
+			?>
+			<tr>
+				<td><?php echo $row['id']; ?></td>
+				<td><?php echo $row['nama']; ?></td>
+				<td><?php echo $row['deskripsi']; ?></td>
+				<td><?php echo $row['qty']; ?></td>
+				<td>
+					<a href="edit_barang.php?id=<?php echo $row['id'];?>">Edit</a>
+					<a href="hapus_barang.php?id=<?php echo $row['id'];?>" onclick="return confirm('Apakah anda yakin untuk menghapus data ini?');">Hapus</a>
+				</td>
+			</tr>
+			<?php
+			}
+		}
+		// jika tidak ada, beri pesan
+		else{
+			echo "<tr><td colspan='5'>No data available yet</td></tr>";
 		}
 		?>
 	</table>
@@ -83,28 +100,31 @@ $result = mysql_query("SELECT * FROM msbarang LIMIT $start, $data_per_page");
 	}
 	$end = $start + 4;
 
-	// tampilkan first dan prev
-	echo "Page: ";
-	if ($curr_page > 1){
-		echo "<a href='list_barang.php?page=1'>First</a>&nbsp;";
-		$prev = $curr_page - 1;
-		echo "<a href='list_barang.php?page=$prev'>&lt;</a>";
-	}
+	// jika ada data, cetak page number
+	if($row_num > 0){
+		echo "Page: ";
 
-	// tampilkan nomor halaman
-	for ($i=$start; $i<=$end; $i++) { 
-	?>
-		<a href="list_barang.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-	<?php
-	}
-	
-	// tampilkan next dan last
-	if($curr_page < $page_num){
-		$next = $curr_page + 1;
-		echo "<a href='list_barang.php?page=$next'>&gt;</a>&nbsp;";
-		echo "<a href='list_barang.php?page=$page_num'>Last</a>";
-	}
+		// tampilkan first dan prev
+		if ($curr_page > 1){
+			echo "<a href='list_barang.php?page=1'>First</a>&nbsp;";
+			$prev = $curr_page - 1;
+			echo "<a href='list_barang.php?page=$prev'>&lt;</a>";
+		}
 
+		// tampilkan nomor halaman
+		for ($i=$start; $i<=$end; $i++) { 
+		?>
+			<a href="list_barang.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+		<?php
+		}
+		
+		// tampilkan next dan last
+		if($curr_page < $page_num){
+			$next = $curr_page + 1;
+			echo "<a href='list_barang.php?page=$next'>&gt;</a>&nbsp;";
+			echo "<a href='list_barang.php?page=$page_num'>Last</a>";
+		}
+	}	
 	?>
 </body>
 </html>
