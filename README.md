@@ -1,7 +1,7 @@
 # PHP - MySQL Tutorial
 The tutorial about basic usage of PHP and MySQL. This is a tutorial for AMDP Training which was held on Oct 24th, 2016.
 
-In this tutorial, I provided PHP code for basic CRUD (Create Read Update Delete) combined with MySQL database.
+In this tutorial, I provided PHP code for basic CRUD (Create Read Update Delete) combined with MySQL database. The codes are written in English and Bahasa.
 
 
 ## Get Started
