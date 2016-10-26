@@ -8,7 +8,7 @@ In this tutorial, I provided PHP code for basic CRUD (Create Read Update Delete)
 1. Clone this repo or Download ZIP file
 2. Move all files to htdocs directory (I'm using XAMPP on Windows)
 2. Configure the connection to database in _connect.php_ file
-3. Run webserver and MySQL service 
+3. Run Apache webserver and MySQL service 
 4. Setup the DB (my DB name: _amdptraining_) and create table _"msbarang"_
 4. Open the page in browser using http://localhost:xxxx/folder_name/list_barang.php (use your own port number)
 5. Done!
